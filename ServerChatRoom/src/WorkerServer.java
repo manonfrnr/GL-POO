@@ -1,6 +1,6 @@
 import java.io.*;
 import java.net.Socket;
-import java.util.Date;
+
 
 public class WorkerServer extends Thread{
 
@@ -14,12 +14,12 @@ public class WorkerServer extends Thread{
     public void run (){
         try {
             gestionClientSocket();
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void gestionClientSocket() throws IOException, InterruptedException {
+    private void gestionClientSocket() throws IOException {
         InputStream inputStream = clientSocket.getInputStream();
         OutputStream outputStream = clientSocket.getOutputStream();
 
