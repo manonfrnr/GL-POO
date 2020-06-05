@@ -40,8 +40,11 @@ public class WorkerServer extends Thread{
                 if ("logoff".equals(cmd) || "quitter".equalsIgnoreCase(cmd)){
                     gestionLogoff();
                     break;
-                }else if ("login".equalsIgnoreCase(cmd)){
+                }else if ("login".equalsIgnoreCase(cmd)) {
                     gestionLogin(outputStream, tokens);
+                }else if ("msg".equalsIgnoreCase(cmd)) {
+                    String[] tokensMessage = StringUtils.split(line, null, 3);
+                    gestionMessage(tokensMessage);
                 }else{
                     String msg = "inconnu " + cmd + "\n";
                     outputStream.write(msg.getBytes());
@@ -49,6 +52,19 @@ public class WorkerServer extends Thread{
             }
         }
         clientSocket.close();
+    }
+
+    private void gestionMessage(String[] tokens) throws IOException {
+        String receveur = tokens[1];
+        String message = tokens[2];
+
+        List<WorkerServer> listeWorker = server.getWorkerList();
+        for(WorkerServer ws : listeWorker) {
+            if(receveur.equalsIgnoreCase(ws.getLogin())) {
+                String messageAEnvoyer = "msg " + login + " " + message + "\n";
+                ws.envoyer(message);
+            }
+        }
     }
 
     private void gestionLogoff() throws IOException {
