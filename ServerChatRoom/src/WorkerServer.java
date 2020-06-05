@@ -2,6 +2,7 @@ import org.apache.commons.lang.StringUtils;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -11,6 +12,7 @@ public class WorkerServer extends Thread{
     private final Server server;
     private String login = null;
     private OutputStream outputStream;
+    private HashSet <String> topicSet = new HashSet<>();
 
     public WorkerServer(Server server, Socket clientSocket) {
         this.server = server;
@@ -45,6 +47,10 @@ public class WorkerServer extends Thread{
                 }else if ("msg".equalsIgnoreCase(cmd)) {
                     String[] tokensMessage = StringUtils.split(line, null, 3);
                     gestionMessage(tokensMessage);
+                }else if("join".equalsIgnoreCase(cmd)) {
+                    gestionJoin(tokens);
+                }else if("leave".equalsIgnoreCase(cmd)) {
+                    gestionLeave(tokens);
                 }else{
                     String msg = "inconnu " + cmd + "\n";
                     outputStream.write(msg.getBytes());
@@ -54,15 +60,42 @@ public class WorkerServer extends Thread{
         clientSocket.close();
     }
 
+    private void gestionLeave(String[] tokens) {
+        if(tokens.length > 1){
+            String topic = tokens [1];
+            topicSet.remove(topic);
+        }
+    }
+
+    public boolean estMembreDuTopic(String topic){
+        return topicSet.contains(topic);
+    }
+
+    private void gestionJoin(String[] tokens) {
+        if(tokens.length > 1){
+            String topic = tokens [1];
+            topicSet.add(topic);
+        }
+    }
+
     private void gestionMessage(String[] tokens) throws IOException {
         String receveur = tokens[1];
         String message = tokens[2];
 
+        boolean isTopic = receveur.charAt(0) == '#';
+
         List<WorkerServer> listeWorker = server.getWorkerList();
         for(WorkerServer ws : listeWorker) {
-            if(receveur.equalsIgnoreCase(ws.getLogin())) {
-                String messageAEnvoyer = "msg " + login + " " + message + "\n";
-                ws.envoyer(message);
+            if(isTopic) {
+                if (ws.estMembreDuTopic(receveur)) {
+                    String messageAEnvoyer = "msg " + receveur + ":" + login + message + "\n";
+                    ws.envoyer(messageAEnvoyer);
+                }
+            } else {
+                if(receveur.equalsIgnoreCase(ws.getLogin())) {
+                    String messageAEnvoyer = "msg " + login + " " + message + "\n";
+                    ws.envoyer(messageAEnvoyer);
+                }
             }
         }
     }
