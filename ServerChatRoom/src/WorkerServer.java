@@ -1,3 +1,5 @@
+import org.apache.commons.lang.StringUtils;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -28,12 +30,19 @@ public class WorkerServer extends Thread{
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
         while ((line = reader.readLine()) != null) {
-            if ("quitter".equalsIgnoreCase(line)){
-                break;
+            String[] tokens = StringUtils.split(line);
+
+            if (tokens != null && tokens.length > 0){
+                String cmd = tokens[0];
+                if ("quitter".equalsIgnoreCase(cmd)){
+                    break;
+                }else{
+                    String msg = "inconnu " + cmd + "\n";
+                    outputStream.write(msg.getBytes());
+                }
             }
-            String msg = "tu as ecris: " + line + "\n";
-            outputStream.write(msg.getBytes());
         }
+
         clientSocket.close();
     }
 }
