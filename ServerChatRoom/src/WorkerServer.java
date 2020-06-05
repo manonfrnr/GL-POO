@@ -19,6 +19,8 @@ public class WorkerServer extends Thread{
         }
     }
 
+    //comment
+
     private void gestionClientSocket() throws IOException {
         InputStream inputStream = clientSocket.getInputStream();
         OutputStream outputStream = clientSocket.getOutputStream();
