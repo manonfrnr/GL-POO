@@ -52,6 +52,7 @@ public class WorkerServer extends Thread{
     }
 
     private void gestionLogoff() throws IOException {
+        server.removeWorker(this);
         List<WorkerServer> workerList = server.getWorkerList();
 
         //notifie les autres utilisateur de la déconnexion de l'utilisateur
