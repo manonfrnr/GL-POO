@@ -26,8 +26,6 @@ public class WorkerServer extends Thread{
         }
     }
 
-
-
     private void gestionClientSocket() throws IOException {
         InputStream inputStream = clientSocket.getInputStream();
         this.outputStream = clientSocket.getOutputStream();
@@ -39,10 +37,11 @@ public class WorkerServer extends Thread{
 
             if (tokens != null && tokens.length > 0){
                 String cmd = tokens[0];
-                if ("quitter".equalsIgnoreCase(cmd)){
+                if ("logoff".equals(cmd) || "quitter".equalsIgnoreCase(cmd)){
+                    gestionLogoff();
                     break;
                 }else if ("login".equalsIgnoreCase(cmd)){
-                    GestionLogin(outputStream, tokens);
+                    gestionLogin(outputStream, tokens);
                 }else{
                     String msg = "inconnu " + cmd + "\n";
                     outputStream.write(msg.getBytes());
@@ -52,16 +51,29 @@ public class WorkerServer extends Thread{
         clientSocket.close();
     }
 
+    private void gestionLogoff() throws IOException {
+        List<WorkerServer> workerList = server.getWorkerList();
+
+        //notifie les autres utilisateur de la déconnexion de l'utilisateur
+        String onlineMessage = login + " est déconnecté\n";
+        for(WorkerServer workerServer : workerList){
+            if (!login.equals(workerServer.getLogin())) { //éviter d'afficher son propre statut
+                workerServer.envoyer(onlineMessage);
+            }
+        }
+        clientSocket.close();
+    }
+
     public String getLogin(){
         return login;
     }
 
-    private void GestionLogin(OutputStream outputStream, String[] tokens) throws IOException {
+    private void gestionLogin(OutputStream outputStream, String[] tokens) throws IOException {
         if (tokens.length == 3){
             String login = tokens[1];
             String password = tokens[2];
 
-            if (login.equals("invit") && password.equals("invit") || login.equals("test") && password.equals("test") ){
+            if (login.equals("invit") && password.equals("invit") || login.equals("test") && password.equals("test") ){ //les deux utilisateurs possible pour la connexion (pour le moment)
                 String msg = "ok connection\n";
                 outputStream.write(msg.getBytes());
                 this.login = login;

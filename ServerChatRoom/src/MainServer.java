@@ -5,6 +5,4 @@ public class MainServer {
         Server server = new Server(port);
         server.start();
     }
-
-
 }
