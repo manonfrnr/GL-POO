@@ -151,6 +151,7 @@ public class WorkerServer extends Thread{
             }else{
                 String msg = "erreur connection\n";
                 outputStream.write(msg.getBytes());
+                System.err.println("Login failed for " + login);
             }
         }
     }
