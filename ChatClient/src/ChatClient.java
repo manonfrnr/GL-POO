@@ -60,7 +60,7 @@ public class ChatClient {
     }
 
     public void msg(String SendTo, String msgBody) throws IOException {
-        String cmd = "msg" + SendTo + " " + msgBody + "\n";
+        String cmd = "msg " + SendTo + " " + msgBody + "\n";
         serverOut.write(cmd.getBytes());
     }
 
