@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ChatClient/ChatClient.iml" filepath="$PROJECT_DIR$/ChatClient/ChatClient.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ClientChatRoom/ClientChatRoom.iml" filepath="$PROJECT_DIR$/ClientChatRoom/ClientChatRoom.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/GL-POO.iml" filepath="$PROJECT_DIR$/.idea/GL-POO.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ServerChatRoom/ServerChatRoom.iml" filepath="$PROJECT_DIR$/ServerChatRoom/ServerChatRoom.iml" />
     </modules>
   </component>
 </project>
