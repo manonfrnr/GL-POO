@@ -36,25 +36,6 @@ public class PanneauUtilisateur extends JPanel implements UserStatus {
         });
     }
 
-    public static void main(String[] args) {
-        ChatClient client = new ChatClient("localhost", 8818);
-        PanneauUtilisateur panneauUtilisateur = new PanneauUtilisateur(client);
-        JFrame frame = new JFrame("Liste des Utilisateurs");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(new Dimension(400, 600));
-
-        frame.getContentPane().add(panneauUtilisateur, BorderLayout.CENTER);
-        frame.setVisible(true);
-
-        if(client.connect()) {
-            try {
-                client.login("invit", "invit");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     @Override
     public void online(String login) {
         this.UIlistModel.addElement(login);
