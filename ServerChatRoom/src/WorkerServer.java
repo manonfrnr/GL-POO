@@ -2,6 +2,7 @@ import org.apache.commons.lang.StringUtils;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashSet;
 import java.util.List;
 
@@ -29,35 +30,41 @@ public class WorkerServer extends Thread{
     }
 
     private void gestionClientSocket() throws IOException {
-        InputStream inputStream = clientSocket.getInputStream();
-        this.outputStream = clientSocket.getOutputStream();
+        try {
+            InputStream inputStream = clientSocket.getInputStream();
+            this.outputStream = clientSocket.getOutputStream();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            String[] tokens = StringUtils.split(line);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] tokens = StringUtils.split(line);
 
-            if (tokens != null && tokens.length > 0){
-                String cmd = tokens[0];
-                if ("logoff".equals(cmd) || "quitter".equalsIgnoreCase(cmd)){
-                    gestionLogoff();
-                    break;
-                }else if ("login".equalsIgnoreCase(cmd)) {
-                    gestionLogin(outputStream, tokens);
-                }else if ("msg".equalsIgnoreCase(cmd)) {
-                    String[] tokensMessage = StringUtils.split(line, null, 3);
-                    gestionMessage(tokensMessage);
-                }else if("join".equalsIgnoreCase(cmd)) {
-                    gestionJoin(tokens);
-                }else if("leave".equalsIgnoreCase(cmd)) {
-                    gestionLeave(tokens);
-                }else{
-                    String msg = "inconnu " + cmd + "\n";
-                    outputStream.write(msg.getBytes());
+                if (tokens != null && tokens.length > 0) {
+                    String cmd = tokens[0];
+                    if ("logoff".equals(cmd) || "quitter".equalsIgnoreCase(cmd)) {
+                        gestionLogoff();
+                        break;
+                    } else if ("login".equalsIgnoreCase(cmd)) {
+                        gestionLogin(outputStream, tokens);
+                    } else if ("msg".equalsIgnoreCase(cmd)) {
+                        String[] tokensMessage = StringUtils.split(line, null, 3);
+                        gestionMessage(tokensMessage);
+                    } else if ("join".equalsIgnoreCase(cmd)) {
+                        gestionJoin(tokens);
+                    } else if ("leave".equalsIgnoreCase(cmd)) {
+                        gestionLeave(tokens);
+                    } else {
+                        String msg = "inconnu " + cmd + "\n";
+                        outputStream.write(msg.getBytes());
+                    }
                 }
             }
+            clientSocket.close();
+        } catch (SocketException e) {
+            System.out.println("Une erreur est survenue chez le client " + login + ", déconnexion");
+            gestionLogoff();
         }
-        clientSocket.close();
+
     }
 
     private void gestionLeave(String[] tokens) {
@@ -105,7 +112,7 @@ public class WorkerServer extends Thread{
         List<WorkerServer> workerList = server.getWorkerList();
 
         //notifie les autres utilisateur de la déconnexion de l'utilisateur
-        String onlineMessage = login + " est déconnecté\n";
+        String onlineMessage = "offline " + login + "\n";
         for(WorkerServer workerServer : workerList){
             if (!login.equals(workerServer.getLogin())) { //éviter d'afficher son propre statut
                 workerServer.envoyer(onlineMessage);
@@ -135,14 +142,14 @@ public class WorkerServer extends Thread{
                 for(WorkerServer workerServer : workerList){
                        if (workerServer.getLogin() != null) {
                            if (!login.equals(workerServer.getLogin())) { //éviter d'afficher son propre statut
-                               String message2 = workerServer.getLogin() + " est en ligne\n";
+                               String message2 = "online " + workerServer.getLogin() + "\n";
                                envoyer(message2);
                            }
                        }
                 }
 
                 // renvoie aux autres utilisateurs les utilisateurs en ligne
-                String onlineMessage = login + " est en ligne\n";
+                String onlineMessage = "online " + login + "\n";
                 for(WorkerServer workerServer : workerList){
                     if (!login.equals(workerServer.getLogin())) { //éviter d'afficher son propre statut
                         workerServer.envoyer(onlineMessage);
