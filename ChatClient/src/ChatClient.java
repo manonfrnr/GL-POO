@@ -65,13 +65,13 @@ public class ChatClient {
     }
 
     private boolean login(String login, String password) throws IOException {
-        String cmd = "login" + login + " " + password + "\n";
+        String cmd = "login " + login + " " + password + "\n";
         serverOut.write(cmd.getBytes());
 
         String response = bufferedIn.readLine();
         System.out.println("Response Line:" + response );
 
-        if ("ok login".equalsIgnoreCase(response)) {
+        if ("ok connection".equalsIgnoreCase(response)) {
             startMessage();
             return true;
         } else {
