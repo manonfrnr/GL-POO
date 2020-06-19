@@ -95,7 +95,7 @@ public class WorkerServer extends Thread{
         for(WorkerServer ws : listeWorker) {
             if(isTopic) {
                 if (ws.estMembreDuTopic(receveur)) {
-                    String messageAEnvoyer = "msg " + receveur + ":" + login + message + "\n";
+                    String messageAEnvoyer = "msg " + receveur + " " + login + " " + message + "\n";
                     ws.envoyer(messageAEnvoyer);
                 }
             } else {
@@ -164,7 +164,7 @@ public class WorkerServer extends Thread{
     }
 
     private void envoyer(String message) throws IOException {
-        if (login != null){
+        if (login != null && outputStream != null){
             outputStream.write(message.getBytes());
         }
     }
