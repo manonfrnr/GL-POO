@@ -53,7 +53,7 @@ public class PanneauUtilisateur extends JPanel implements UserStatus {
         });
     }
 
-    private void openMessageWindow(String login) {
+    public Boolean openMessageWindow(String login) {
         PanneauMessage panneauMessage = new PanneauMessage(client, login);
 
         JFrame frame = new JFrame("Messages à " + login);
@@ -61,6 +61,7 @@ public class PanneauUtilisateur extends JPanel implements UserStatus {
         frame.setSize(new Dimension(500, 500));
         frame.getContentPane().add(panneauMessage, BorderLayout.CENTER);
         frame.setVisible(true);
+        return true;
     }
 
     @Override

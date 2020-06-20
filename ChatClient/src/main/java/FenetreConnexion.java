@@ -42,7 +42,7 @@ public class FenetreConnexion extends JFrame {
         pack();
     }
 
-    private void doLogin() {
+    public Boolean doLogin() {
         String login_value = this.login.getText();
         String password_value = this.password.getText();
 
@@ -56,12 +56,14 @@ public class FenetreConnexion extends JFrame {
                 frame.getContentPane().add(panneauUtilisateur, BorderLayout.CENTER);
                 frame.setVisible(true);
                 this.setVisible(false);
+                return true;
             } else {
                 JOptionPane.showMessageDialog(this, "Login ou mot de passe incorrect");
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     public static void main(String[] args) {
