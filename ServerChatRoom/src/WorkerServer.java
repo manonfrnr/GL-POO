@@ -3,6 +3,7 @@ import org.apache.commons.lang.StringUtils;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -53,6 +54,10 @@ public class WorkerServer extends Thread{
                         gestionJoin(tokens);
                     } else if ("leave".equalsIgnoreCase(cmd)) {
                         gestionLeave(tokens);
+                    } else if ("history".equalsIgnoreCase(cmd)) {
+                        gestionHistory(tokens);
+                    } else if ("delete".equalsIgnoreCase(cmd)) {
+                        gestionDelete(tokens);
                     } else {
                         String msg = "inconnu " + cmd + "\n";
                         outputStream.write(msg.getBytes());
@@ -65,6 +70,36 @@ public class WorkerServer extends Thread{
             gestionLogoff();
         }
 
+    }
+
+    private void gestionHistory(String[] tokens) {
+        if (tokens.length > 1) {
+            String from = tokens[1];
+            String messageAEnvoyer = "";
+            for(History h : server.getHistoriques()) {
+                if(from.startsWith("#")) { // Si c'est un groupe
+                    if (h.getTo().equalsIgnoreCase(from)) {
+                        if (h.getFrom().equals(this.login)) {
+                            messageAEnvoyer = "msg " + from + " Vous " + h.getMessage() + "\n";
+                        } else {
+                            messageAEnvoyer = "msg " + from + " " + h.getFrom() + " " + h.getMessage() + "\n";
+                        }
+                    }
+                } else {
+                    if (h.getFrom().equals(from) && h.getTo().equals(this.login)) {
+                        messageAEnvoyer = "msg " + h.getFrom() + " " + h.getMessage() + "\n";
+                    } else if (h.getFrom().equals(this.login) && h.getTo().equals(from)) {
+                        messageAEnvoyer = "msg Vous " + h.getMessage() + "\n";
+                    }
+                }
+                try {
+                    envoyer(messageAEnvoyer);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
     }
 
     private void gestionLeave(String[] tokens) {
@@ -108,6 +143,8 @@ public class WorkerServer extends Thread{
     private void gestionMessage(String[] tokens) throws IOException {
         String receveur = tokens[1];
         String message = tokens[2];
+
+        server.getHistoriques().add(new History(this.login, receveur, message));
 
         boolean isTopic = receveur.charAt(0) == '#';
 
@@ -180,6 +217,13 @@ public class WorkerServer extends Thread{
                 outputStream.write(msg.getBytes());
                 System.err.println("Login failed for " + login);
             }
+        }
+    }
+
+    private void gestionDelete(String tokens[]) {
+        if (tokens.length > 1) {
+            String destinataire = tokens[1];
+            server.deleteHistory(destinataire, this.login);
         }
     }
 
