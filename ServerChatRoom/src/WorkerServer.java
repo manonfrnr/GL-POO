@@ -71,6 +71,16 @@ public class WorkerServer extends Thread{
         if(tokens.length > 1){
             String topic = tokens [1];
             topicSet.remove(topic);
+            try {
+                List<WorkerServer> listeWorker = server.getWorkerList();
+                for(WorkerServer ws : listeWorker) {
+                    if (ws.estMembreDuTopic(topic)) {
+                        ws.envoyer("msg " + topic + " Server " + login + " leaved the channel " + topic + "\n");
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -82,6 +92,16 @@ public class WorkerServer extends Thread{
         if(tokens.length > 1){
             String topic = tokens [1];
             topicSet.add(topic);
+            try {
+                List<WorkerServer> listeWorker = server.getWorkerList();
+                for(WorkerServer ws : listeWorker) {
+                    if (ws.estMembreDuTopic(topic)) {
+                        ws.envoyer("msg " + topic + " Server " + login + " joined the channel " + topic + "\n");
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
