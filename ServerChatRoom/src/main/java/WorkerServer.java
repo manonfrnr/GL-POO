@@ -143,6 +143,7 @@ public class WorkerServer extends Thread{
     private void gestionMessage(String[] tokens) throws IOException {
         String receveur = tokens[1];
         String message = tokens[2];
+        System.out.println("Message " + message);
 
         server.getHistoriques().add(new History(this.login, receveur, message));
 

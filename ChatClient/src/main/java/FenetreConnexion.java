@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.net.ConnectException;
 
 public class FenetreConnexion extends JFrame {
     private final ChatClient client;
@@ -14,7 +15,11 @@ public class FenetreConnexion extends JFrame {
         super("Connexion");
         
         this.client = new ChatClient("localhost", 8818);
-        client.connect();
+        try {
+            client.connect();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Impossible de se connecter au serveur : " + e.getLocalizedMessage());
+        }
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(new Dimension(300, 200));
