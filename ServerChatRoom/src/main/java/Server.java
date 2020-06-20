@@ -2,11 +2,14 @@ import java.io.IOException;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Server extends Thread {
     private final int serverPort;
+    private Boolean stop = false;
+    private ServerSocket serverSocket;
 
     private ArrayList<History> historiques;
 
@@ -34,23 +37,30 @@ public class Server extends Thread {
         return this.historiques;
     }
 
+    public void stopMe() throws IOException {
+        this.stop = true;
+        if (this.serverSocket != null) {
+            this.serverSocket.close();
+        }
+    }
+
     @Override
     public void run() {
         try{
-            ServerSocket serverSocket;
-            try {
-                serverSocket = new ServerSocket(serverPort);
-            } catch (BindException e) {
-                return;
-            }
-            while(true){
+            serverSocket = new ServerSocket(serverPort);
+            while(!stop){
                 System.out.println("About to accept client connection...");
-                Socket clientSocket = serverSocket.accept();
-                System.out.println("Accepted connection from " + clientSocket);
-                WorkerServer workerServer = new WorkerServer(this, clientSocket);
-                workerList.add(workerServer);
-                workerServer.start();
+                try {
+                    Socket clientSocket = serverSocket.accept();
+                    System.out.println("Accepted connection from " + clientSocket);
+                    WorkerServer workerServer = new WorkerServer(this, clientSocket);
+                    workerList.add(workerServer);
+                    workerServer.start();
+                } catch (SocketException e) {
+
+                }
             }
+            System.out.println("Bye");
         } catch (IOException e) {
             e.printStackTrace();
         }
