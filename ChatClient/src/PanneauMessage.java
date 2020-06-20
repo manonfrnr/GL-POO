@@ -22,13 +22,24 @@ public class PanneauMessage extends JPanel implements MessageListener {
         add(new JScrollPane(listeMessages), BorderLayout.CENTER);
         add(inputMessage, BorderLayout.SOUTH);
 
+        try {
+            client.downloadHistoryFrom(this.login);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         inputMessage.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     String text = inputMessage.getText();
-                    client.msg(login, text);
-                    listeMessagesModel.addElement("Vous: " + text);
+                    if(text.startsWith("/delete")) {
+                        client.deleteHistoryFrom(login);
+                        listeMessagesModel.removeAllElements();
+                    } else {
+                        client.msg(login, text);
+                        listeMessagesModel.addElement("Vous: " + text);
+                    }
                     inputMessage.setText(""); // On vide le formulaire une fois envoyé
                 } catch (IOException ex) {
                     ex.printStackTrace();
@@ -39,7 +50,7 @@ public class PanneauMessage extends JPanel implements MessageListener {
 
     @Override
     public void onMessage(String fromLogin, String msgBody) {
-        if (fromLogin.equals(this.login)) { // Si c'est bien la bonne fenêtre de la bonne personne
+        if (fromLogin.equals(this.login) || fromLogin.equals("Vous")) { // Si c'est bien la bonne fenêtre de la bonne personne
             String ligne;
             if (fromLogin.startsWith("#")) { // Si c'est un groupe
                 String actualLogin = msgBody.split(" ")[0];

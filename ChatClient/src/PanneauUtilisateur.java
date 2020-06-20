@@ -37,12 +37,14 @@ public class PanneauUtilisateur extends JPanel implements UserStatus {
                     try {
                         client.join(champDestinataire.getText());
                         openMessageWindow(champDestinataire.getText());
+                        champDestinataire.setText("");
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
                 } else {
                     if (UIlistModel.contains(champDestinataire.getText())) {
                         openMessageWindow(champDestinataire.getText());
+                        champDestinataire.setText("");
                     } else {
                         JOptionPane.showMessageDialog(getParent(), "Cet utilisateur n'existe pas. Si vous souhaitez rejoindre un groupe, ajouter un # au début du nom.");
                     }

@@ -7,14 +7,30 @@ import java.util.List;
 public class Server extends Thread {
     private final int serverPort;
 
+    private ArrayList<History> historiques;
+
     private ArrayList<WorkerServer> workerList = new ArrayList<>();
 
     public Server(int serverPort) {
         this.serverPort = serverPort;
+        this.historiques = new ArrayList<>();
+    }
+
+    public void deleteHistory(String user1, String user2) {
+        if (user1.startsWith("#") || user2.startsWith("#")) {
+            String groupname = (user1.startsWith("#") ? user1 : user2);
+            this.historiques.removeIf(h -> h.getFrom().equals(groupname) || h.getTo().equals(groupname));
+        } else {
+            this.historiques.removeIf(h -> h.getFrom().equals(user1) && h.getTo().equals(user2) || h.getFrom().equals(user2) && h.getTo().equals(user1));
+        }
     }
 
     public List<WorkerServer> getWorkerList(){
         return workerList;
+    }
+
+    public ArrayList<History>  getHistoriques() {
+        return this.historiques;
     }
 
     @Override
