@@ -4,6 +4,8 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/MavenModule/pom.xml" />
+        <option value="$PROJECT_DIR$/ChatClient/pom.xml" />
+        <option value="$PROJECT_DIR$/ServerChatRoom/pom.xml" />
       </list>
     </option>
   </component>

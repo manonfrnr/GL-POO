@@ -6,10 +6,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="ChatClient" />
+        <module name="ServerChatRoom" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="ChatClient" target="1.5" />
       <module name="MavenModule" target="1.5" />
+      <module name="ServerChatRoom" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>
