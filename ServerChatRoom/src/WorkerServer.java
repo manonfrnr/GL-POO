@@ -77,16 +77,27 @@ public class WorkerServer extends Thread{
             String from = tokens[1];
             String messageAEnvoyer = "";
             for(History h : server.getHistoriques()) {
-                if(h.getFrom().equals(from) && h.getTo().equals(this.login)) {
-                    messageAEnvoyer = "msg " + h.getFrom() + " " + h.getMessage() + "\n";
-                } else if(h.getFrom().equals(this.login) && h.getTo().equals(from)) {
-                    messageAEnvoyer = "msg Vous " + h.getMessage() + "\n";
+                if(from.startsWith("#")) { // Si c'est un groupe
+                    if (h.getTo().equalsIgnoreCase(from)) {
+                        if (h.getFrom().equals(this.login)) {
+                            messageAEnvoyer = "msg " + from + " Vous " + h.getMessage() + "\n";
+                        } else {
+                            messageAEnvoyer = "msg " + from + " " + h.getFrom() + " " + h.getMessage() + "\n";
+                        }
+                    }
+                } else {
+                    if (h.getFrom().equals(from) && h.getTo().equals(this.login)) {
+                        messageAEnvoyer = "msg " + h.getFrom() + " " + h.getMessage() + "\n";
+                    } else if (h.getFrom().equals(this.login) && h.getTo().equals(from)) {
+                        messageAEnvoyer = "msg Vous " + h.getMessage() + "\n";
+                    }
                 }
                 try {
                     envoyer(messageAEnvoyer);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
             }
         }
     }

@@ -17,7 +17,12 @@ public class Server extends Thread {
     }
 
     public void deleteHistory(String user1, String user2) {
-        this.historiques.removeIf(h -> h.getFrom().equals(user1) && h.getTo().equals(user2) || h.getFrom().equals(user2) && h.getTo().equals(user1));
+        if (user1.startsWith("#") || user2.startsWith("#")) {
+            String groupname = (user1.startsWith("#") ? user1 : user2);
+            this.historiques.removeIf(h -> h.getFrom().equals(groupname) || h.getTo().equals(groupname));
+        } else {
+            this.historiques.removeIf(h -> h.getFrom().equals(user1) && h.getTo().equals(user2) || h.getFrom().equals(user2) && h.getTo().equals(user1));
+        }
     }
 
     public List<WorkerServer> getWorkerList(){
