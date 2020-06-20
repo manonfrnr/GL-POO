@@ -12,6 +12,10 @@ public class PanneauMessage extends JPanel implements MessageListener {
     private JList<String> listeMessages = new JList<>(listeMessagesModel);
     private JTextField inputMessage = new JTextField();
 
+    public DefaultListModel<String> getListeMessagesModel() {
+        return this.listeMessagesModel;
+    }
+
     public PanneauMessage(final ChatClient client, final String login) {
         this.client = client;
         this.login = login;

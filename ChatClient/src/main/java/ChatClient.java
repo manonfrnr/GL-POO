@@ -95,7 +95,7 @@ public class ChatClient {
         return this.mylogin;
     }
 
-    private void logoff() throws IOException {
+    public void logoff() throws IOException {
         String cmd = "logoff\n";
         serverOut.write(cmd.getBytes());
     }
