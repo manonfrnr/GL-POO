@@ -10,7 +10,7 @@ public class PanneauUtilisateur extends JPanel implements UserStatus {
     private DefaultListModel<String> UIlistModel;
     private JTextField champDestinataire;
 
-    public PanneauUtilisateur(ChatClient client) {
+    public PanneauUtilisateur(final ChatClient client) {
         this.client = client;
         this.client.addUserStatus(this);
         this.UIlistModel = new DefaultListModel<>();

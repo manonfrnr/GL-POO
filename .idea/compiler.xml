@@ -11,9 +11,9 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="ChatClient" target="1.5" />
+      <module name="ChatClient" target="13" />
       <module name="MavenModule" target="1.5" />
-      <module name="ServerChatRoom" target="1.5" />
+      <module name="ServerChatRoom" target="13" />
     </bytecodeTargetLevel>
   </component>
 </project>
