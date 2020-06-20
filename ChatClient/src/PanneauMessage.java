@@ -33,8 +33,13 @@ public class PanneauMessage extends JPanel implements MessageListener {
             public void actionPerformed(ActionEvent e) {
                 try {
                     String text = inputMessage.getText();
-                    client.msg(login, text);
-                    listeMessagesModel.addElement("Vous: " + text);
+                    if(text.startsWith("/delete")) {
+                        client.deleteHistoryFrom(login);
+                        listeMessagesModel.removeAllElements();
+                    } else {
+                        client.msg(login, text);
+                        listeMessagesModel.addElement("Vous: " + text);
+                    }
                     inputMessage.setText(""); // On vide le formulaire une fois envoyé
                 } catch (IOException ex) {
                     ex.printStackTrace();

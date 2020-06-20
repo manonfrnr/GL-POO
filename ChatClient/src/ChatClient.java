@@ -199,4 +199,9 @@ public class ChatClient {
         String cmd = "history " + login + "\n";
         serverOut.write(cmd.getBytes());
     }
+
+    public void deleteHistoryFrom(String login) throws IOException {
+        String cmd = "delete " + login + "\n";
+        serverOut.write(cmd.getBytes());
+    }
 }

@@ -56,6 +56,8 @@ public class WorkerServer extends Thread{
                         gestionLeave(tokens);
                     } else if ("history".equalsIgnoreCase(cmd)) {
                         gestionHistory(tokens);
+                    } else if ("delete".equalsIgnoreCase(cmd)) {
+                        gestionDelete(tokens);
                     } else {
                         String msg = "inconnu " + cmd + "\n";
                         outputStream.write(msg.getBytes());
@@ -204,6 +206,13 @@ public class WorkerServer extends Thread{
                 outputStream.write(msg.getBytes());
                 System.err.println("Login failed for " + login);
             }
+        }
+    }
+
+    private void gestionDelete(String tokens[]) {
+        if (tokens.length > 1) {
+            String destinataire = tokens[1];
+            server.deleteHistory(destinataire, this.login);
         }
     }
 

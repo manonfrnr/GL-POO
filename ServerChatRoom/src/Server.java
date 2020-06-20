@@ -16,6 +16,10 @@ public class Server extends Thread {
         this.historiques = new ArrayList<>();
     }
 
+    public void deleteHistory(String user1, String user2) {
+        this.historiques.removeIf(h -> h.getFrom().equals(user1) && h.getTo().equals(user2) || h.getFrom().equals(user2) && h.getTo().equals(user1));
+    }
+
     public List<WorkerServer> getWorkerList(){
         return workerList;
     }
