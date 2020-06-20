@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -36,7 +37,12 @@ public class Server extends Thread {
     @Override
     public void run() {
         try{
-            ServerSocket serverSocket = new ServerSocket(serverPort);
+            ServerSocket serverSocket;
+            try {
+                serverSocket = new ServerSocket(serverPort);
+            } catch (BindException e) {
+                return;
+            }
             while(true){
                 System.out.println("About to accept client connection...");
                 Socket clientSocket = serverSocket.accept();
