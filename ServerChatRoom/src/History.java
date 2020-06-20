@@ -1,10 +1,12 @@
 public class History {
     private String from;
     private String message;
+    private String to;
 
-    public History(String from, String message) {
+    public History(String from, String to, String message) {
         this.from = from;
         this.message = message;
+        this.to = to;
     }
 
     public String getFrom() {
@@ -13,5 +15,9 @@ public class History {
 
     public String getMessage() {
         return this.message;
+    }
+
+    public String getTo() {
+        return this.to;
     }
 }

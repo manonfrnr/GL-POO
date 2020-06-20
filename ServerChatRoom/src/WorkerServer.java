@@ -15,7 +15,6 @@ public class WorkerServer extends Thread{
     private String login = null;
     private OutputStream outputStream;
     private HashSet <String> topicSet = new HashSet<>();
-    private List<History> historiques = new ArrayList<>();
 
     public WorkerServer(Server server, Socket clientSocket) {
         this.server = server;
@@ -74,14 +73,17 @@ public class WorkerServer extends Thread{
     private void gestionHistory(String[] tokens) {
         if (tokens.length > 1) {
             String from = tokens[1];
-            for(History h : this.historiques) {
-                if(h.getFrom().equals(from)) {
-                    String messageAEnvoyer = "msg " + h.getFrom() + " " + h.getMessage() + "\n";
-                    try {
-                        envoyer(messageAEnvoyer);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            String messageAEnvoyer = "";
+            for(History h : server.getHistoriques()) {
+                if(h.getFrom().equals(from) && h.getTo().equals(this.login)) {
+                    messageAEnvoyer = "msg " + h.getFrom() + " " + h.getMessage() + "\n";
+                } else if(h.getFrom().equals(this.login) && h.getTo().equals(from)) {
+                    messageAEnvoyer = "msg Vous " + h.getMessage() + "\n";
+                }
+                try {
+                    envoyer(messageAEnvoyer);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -129,7 +131,7 @@ public class WorkerServer extends Thread{
         String receveur = tokens[1];
         String message = tokens[2];
 
-        historiques.add(new History(receveur, message));
+        server.getHistoriques().add(new History(this.login, receveur, message));
 
         boolean isTopic = receveur.charAt(0) == '#';
 

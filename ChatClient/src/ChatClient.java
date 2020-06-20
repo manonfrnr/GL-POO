@@ -195,4 +195,8 @@ public class ChatClient {
         messageListeners.remove(listener);
     }
 
+    public void downloadHistoryFrom(String login) throws IOException {
+        String cmd = "history " + login + "\n";
+        serverOut.write(cmd.getBytes());
+    }
 }

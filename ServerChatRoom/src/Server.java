@@ -7,14 +7,21 @@ import java.util.List;
 public class Server extends Thread {
     private final int serverPort;
 
+    private ArrayList<History> historiques;
+
     private ArrayList<WorkerServer> workerList = new ArrayList<>();
 
     public Server(int serverPort) {
         this.serverPort = serverPort;
+        this.historiques = new ArrayList<>();
     }
 
     public List<WorkerServer> getWorkerList(){
         return workerList;
+    }
+
+    public ArrayList<History>  getHistoriques() {
+        return this.historiques;
     }
 
     @Override
