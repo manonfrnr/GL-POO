@@ -166,18 +166,17 @@ public class ChatClient {
         }
     }
 
-    public boolean connect() {
+    public boolean connect() throws IOException {
+        this.socket = new Socket(serverName, serverPort);
+        System.out.println("Client port is" + socket.getLocalPort());
         try {
-            this.socket = new Socket(serverName, serverPort);
-            System.out.println("Client port is" + socket.getLocalPort());
             this.serverOut = socket.getOutputStream();
             this.serverIn = socket.getInputStream();
-            this.bufferedIn = new BufferedReader(new InputStreamReader(serverIn));
-            return true;
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return false;
+        this.bufferedIn = new BufferedReader(new InputStreamReader(serverIn));
+        return true;
     }
 
 
