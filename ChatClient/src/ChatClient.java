@@ -13,6 +13,7 @@ public class ChatClient {
     private InputStream serverIn;
     private OutputStream serverOut;
     private BufferedReader bufferedIn;
+    private String mylogin;
 
     private ArrayList<UserStatus> userSatus = new ArrayList<>();
     private ArrayList<MessageListener> messageListeners = new ArrayList<>();
@@ -64,6 +65,16 @@ public class ChatClient {
         serverOut.write(cmd.getBytes());
     }
 
+    public void join(String group) throws IOException {
+        String cmd = "join " + group + "\n";
+        serverOut.write(cmd.getBytes());
+    }
+
+    public void leave(String group) throws IOException {
+        String cmd = "leave " + group + "\n";
+        serverOut.write(cmd.getBytes());
+    }
+
     public boolean login(String login, String password) throws IOException {
         String cmd = "login " + login + " " + password + "\n";
         serverOut.write(cmd.getBytes());
@@ -72,11 +83,16 @@ public class ChatClient {
         System.out.println("Response Line:" + response );
 
         if ("ok connection".equalsIgnoreCase(response)) {
+            this.mylogin = login;
             startMessage();
             return true;
         } else {
             return false;
         }
+    }
+
+    public String getMyLogin() {
+        return this.mylogin;
     }
 
     private void logoff() throws IOException {

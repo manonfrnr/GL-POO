@@ -40,7 +40,17 @@ public class PanneauMessage extends JPanel implements MessageListener {
     @Override
     public void onMessage(String fromLogin, String msgBody) {
         if (fromLogin.equals(this.login)) { // Si c'est bien la bonne fenêtre de la bonne personne
-            String ligne = fromLogin + ": " + msgBody;
+            String ligne;
+            if (fromLogin.startsWith("#")) { // Si c'est un groupe
+                String actualLogin = msgBody.split(" ")[0];
+                String actualBody = msgBody.replace(actualLogin + " ", "");
+                if (actualLogin.equals(client.getMyLogin())) { // Si c'est notre propre message, on ne l'affiche pas
+                    return;
+                }
+                ligne = actualLogin + ": " + actualBody;
+            } else {
+                ligne = fromLogin + ": " + msgBody;
+            }
             this.listeMessagesModel.addElement(ligne);
         }
     }
