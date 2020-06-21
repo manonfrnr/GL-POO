@@ -20,6 +20,11 @@ public class Server extends Thread {
         this.historiques = new ArrayList<>();
     }
 
+    /**
+     * Supprimer l'historique entre deux utilisateurs
+     * @param user1 premier utilisateur
+     * @param user2 deuxième utilisateur
+     */
     public void deleteHistory(String user1, String user2) {
         if (user1.startsWith("#") || user2.startsWith("#")) {
             String groupname = (user1.startsWith("#") ? user1 : user2);
@@ -37,6 +42,10 @@ public class Server extends Thread {
         return this.historiques;
     }
 
+    /**
+     * Force le serveur à s'arreter
+     * @throws IOException lorsque le socket se ferme mal
+     */
     public void stopMe() throws IOException {
         this.stop = true;
         if (this.serverSocket != null) {
@@ -44,6 +53,9 @@ public class Server extends Thread {
         }
     }
 
+    /**
+     * Lance le server
+     */
     @Override
     public void run() {
         try{

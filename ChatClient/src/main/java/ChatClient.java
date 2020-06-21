@@ -18,6 +18,11 @@ public class ChatClient {
     private ArrayList<UserStatus> userSatus = new ArrayList<>();
     private ArrayList<MessageListener> messageListeners = new ArrayList<>();
 
+    /**
+     * Initialise l'objet ChatClient
+     * @param serverName IP du Server
+     * @param serverPort Port de connexion
+     */
     public ChatClient(String serverName, int serverPort) {
         this.serverName = serverName;
         this.serverPort = serverPort;
@@ -60,21 +65,44 @@ public class ChatClient {
         //client.logoff();
     }
 
+    /**
+     * Envoie un message
+     * @param SendTo Destinataire
+     * @param msgBody contenu du message
+     * @throws IOException lorsqu'il y a un problème de connection
+     */
     public void msg(String SendTo, String msgBody) throws IOException {
         String cmd = "msg " + SendTo + " " + msgBody + "\n";
         serverOut.write(cmd.getBytes());
     }
 
+    /**
+     * Rejoins un groupe
+     * @param group nom du groupe à rejoindre
+     * @throws IOException lorsqu'il y a un problème de connection
+     */
     public void join(String group) throws IOException {
         String cmd = "join " + group + "\n";
         serverOut.write(cmd.getBytes());
     }
 
+    /**
+     * Quitte un groupe
+     * @param group nom du groupe à quitter
+     * @throws IOException lorsqu'il y a un problème de connection
+     */
     public void leave(String group) throws IOException {
         String cmd = "leave " + group + "\n";
         serverOut.write(cmd.getBytes());
     }
 
+    /**
+     * Se connecte en tant qu'une personne
+     * @param login identifiant de connexion
+     * @param password mot de passe
+     * @throws IOException lorsqu'il y a un problème de connection
+     * @return vrai si ça s'est bien passé
+     */
     public boolean login(String login, String password) throws IOException {
         String cmd = "login " + login + " " + password + "\n";
         serverOut.write(cmd.getBytes());
@@ -95,6 +123,10 @@ public class ChatClient {
         return this.mylogin;
     }
 
+    /**
+     * Deconnecte l'utilisateur
+     * @throws IOException lorsqu'il y a un problème de connection
+     */
     public void logoff() throws IOException {
         String cmd = "logoff\n";
         serverOut.write(cmd.getBytes());
@@ -166,6 +198,11 @@ public class ChatClient {
         }
     }
 
+    /**
+     * Connexion au server
+     * @throws IOException lorsque la connexion se passse mal
+     * @return vrai quand la connexion est reussie
+     */
     public boolean connect() throws IOException {
         this.socket = new Socket(serverName, serverPort);
         System.out.println("Client port is" + socket.getLocalPort());
