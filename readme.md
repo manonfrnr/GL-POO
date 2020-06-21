@@ -1,5 +1,12 @@
 # Projet Génie Logiciel : Chat en ligne
 
+## Equipe (cf Trello pour répartition plus précise): 
+* ✔ Sacha Benhamou : Chat Client API
+* ✔ Anaïs Dubois: Présence des utilisateurs (online/offline)
+* ✔ Manon Fournier : Envoi des messages + Sauvegarde + Supression des messages +  Gui + Script Maven + JavaDoc + Test unitaires (Junit)
+* ✔ Meegan Guillon: Création du chat server
+* ✔ Amine Taleb: Diagramme UML
+
 ## Fonctionnalités techniques
 
 * ✔ Serveur
