@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ServerChatRoom:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ServerChatRoom_jar</output-path>
+    <root id="archive" name="ServerChatRoom.jar">
+      <element id="module-output" name="ServerChatRoom" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-lang/commons-lang/2.6/commons-lang-2.6.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
